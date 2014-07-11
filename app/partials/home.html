@@ -1,0 +1,61 @@
+<style>
+    .green{
+        color: #36d239;
+        font-weight: bold;
+    }
+</style>
+
+<div class="row">
+    <div class="form-group col-lg-3 col-md-3 col-sm-12 col-xs-12">
+        <input type="text" name="search" ng-model="search" class="form-control" placeholder="Search" />
+    </div>
+    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+        <!-- <select class="form-control" ng-model="countryName" ng-change="changeCountry()" ng-options="entry.country as entry.country for entry in data|unique: 'country'"> -->
+        <select class="form-control" ng-model="countryName" ng-change="changeCountry()" ng-options="entry.country as entry.country for entry in data|unique: 'country'">
+            <option value="">-- Countries --</option>
+        </select>
+    </div>
+    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+        <select class="form-control" ng-model="sportsName" ng-options="entry.type as entry.type for entry in data| filter: countryName |unique: 'type'">
+            <option value="">-- Sports --</option>
+        </select>
+    </div>
+    <div class="form-group col-lg-2 col-md-2 col-sm-12 col-xs-12">
+        <label for="checkFeature">
+            <input type="checkbox" id="checkFeature" ng-model="checkFeature" ng-true-value="true" ng-false-value="" /> Featured
+        </label>
+    </div>
+    <div class="form-group col-lg-3 col-md-3 col-sm-12 col-xs-12" ng-init="sort=''">
+        <label>
+            <input type="radio" name="sort" ng-model="sort" value="name" /> Name
+        </label>
+        <label>
+            <input type="radio" name="sort" ng-model="sort" value="country" /> Country
+        </label>
+        <label>
+            <input type="radio" name="sort" ng-model="sort" value="type" /> Type
+        </label>
+        <label>
+            <input type="radio" name="sort" ng-model="sort" value="" /> None
+        </label>
+    </div>
+
+</div>
+<div class="row">
+    <table ng-table="tableParams" class="table table-bordered table-hover table-striped table-responsive col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Country</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="entry in $data | orderBy: sort | filter:search | filter: checkFeature | filter: countryName | filter: sportsName" ng-class="{green:entry.featured}">
+                <td data-title="'Name'" filter="{ 'name': 'select' }" filter-data="names($column)">{{ entry.name }}</td>
+                <td>{{ entry.type }}</td>
+                <td>{{ entry.country }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
